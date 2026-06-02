@@ -23,7 +23,7 @@ Realtime chat app with:
    ```bash
    npm run dev
    ```
-4. Open `http://localhost:3000` in two tabs/windows and register two users.
+4. Open `http://localhost:3001` in two tabs/windows and register two users.
 
 ## Persistence
 
