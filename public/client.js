@@ -1,5 +1,6 @@
 const authPanel = document.getElementById("authPanel");
 const chatPanel = document.getElementById("chatPanel");
+const themeToggleBtn = document.getElementById("themeToggleBtn");
 const authForm = document.getElementById("authForm");
 const authUsername = document.getElementById("authUsername");
 const authPassword = document.getElementById("authPassword");
@@ -26,6 +27,7 @@ let socket = null;
 let token = localStorage.getItem("chat_token") || "";
 let user = null;
 let activeRoom = "general";
+let theme = localStorage.getItem("chat_theme") || "";
 
 const formatTime = (dateIso) =>
   new Date(dateIso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -33,6 +35,13 @@ const formatTime = (dateIso) =>
 const setStatus = (el, message, isError = false) => {
   el.textContent = message;
   el.classList.toggle("error", isError);
+};
+
+const applyTheme = (nextTheme) => {
+  theme = nextTheme;
+  document.body.setAttribute("data-theme", theme);
+  localStorage.setItem("chat_theme", theme);
+  themeToggleBtn.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
 };
 
 const pushMessage = (payload) => {
@@ -175,6 +184,10 @@ const authorizedFetch = async (url, options = {}) => {
   return response;
 };
 
+themeToggleBtn.addEventListener("click", () => {
+  applyTheme(theme === "dark" ? "light" : "dark");
+});
+
 authForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   await authRequest("login");
@@ -316,5 +329,10 @@ const bootstrapWithToken = async () => {
   setAuthenticatedUI();
   connectSocket();
 };
+
+if (!theme) {
+  theme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+}
+applyTheme(theme);
 
 bootstrapWithToken();

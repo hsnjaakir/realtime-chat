@@ -12,6 +12,42 @@
   --accent: #8b5cf6;
   --accent-2: #22d3ee;
   --danger: #fb7185;
+  --header-bg: linear-gradient(90deg, #8b5cf622, #22d3ee1a);
+  --soft-border: rgba(148, 163, 184, 0.2);
+  --surface: rgba(15, 23, 42, 0.5);
+  --surface-2: rgba(15, 23, 42, 0.46);
+  --message-bg: linear-gradient(145deg, #0f172a, #131f35);
+  --message-border: rgba(100, 116, 139, 0.35);
+  --status: #bfdbfe;
+  --status-error: #fecdd3;
+  --user-badge: #ddd6fe;
+  --timestamp: #a5b4fc;
+  --focus-ring: #60a5fa33;
+  --shadow: 0 24px 60px rgba(2, 6, 23, 0.5);
+}
+
+body[data-theme="light"] {
+  --bg-1: #f4f7ff;
+  --bg-2: #dff6ff;
+  --panel: rgba(255, 255, 255, 0.88);
+  --panel-border: rgba(148, 163, 184, 0.35);
+  --text: #0f172a;
+  --muted: #475569;
+  --accent: #2563eb;
+  --accent-2: #0891b2;
+  --danger: #ef4444;
+  --header-bg: linear-gradient(90deg, #93c5fd66, #67e8f955);
+  --soft-border: rgba(148, 163, 184, 0.35);
+  --surface: rgba(241, 245, 249, 0.82);
+  --surface-2: rgba(248, 250, 252, 0.86);
+  --message-bg: linear-gradient(145deg, #ffffff, #f1f5f9);
+  --message-border: rgba(148, 163, 184, 0.42);
+  --status: #1d4ed8;
+  --status-error: #be123c;
+  --user-badge: #3730a3;
+  --timestamp: #4338ca;
+  --focus-ring: #2563eb2b;
+  --shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
 }
 
 body {
@@ -34,7 +70,7 @@ body {
   border: 1px solid var(--panel-border);
   border-radius: 20px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 24px 60px rgba(2, 6, 23, 0.5);
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   height: min(88vh, 760px);
@@ -43,8 +79,21 @@ body {
 
 .chat-header {
   padding: 1.2rem 1.4rem;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-  background: linear-gradient(90deg, #8b5cf622, #22d3ee1a);
+  border-bottom: 1px solid var(--soft-border);
+  background: var(--header-bg);
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle {
+  white-space: nowrap;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.75rem;
 }
 
 .chat-header h1 {
@@ -76,8 +125,8 @@ body {
   max-width: 460px;
   padding: 1rem;
   border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--panel-border);
+  background: var(--surface);
   margin-bottom: 0.9rem;
 }
 
@@ -91,8 +140,8 @@ body {
   gap: 0.65rem;
   padding: 0.9rem;
   border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  background: rgba(15, 23, 42, 0.46);
+  border: 1px solid var(--panel-border);
+  background: var(--surface-2);
 }
 
 .row {
@@ -107,12 +156,12 @@ body {
 
 .status-line {
   margin: 0;
-  color: #bfdbfe;
+  color: var(--status);
   font-size: 0.88rem;
 }
 
 .status-line.error {
-  color: #fecdd3;
+  color: var(--status-error);
 }
 
 h3 {
@@ -123,7 +172,7 @@ h3 {
 
 #currentUser {
   font-weight: 600;
-  color: #ddd6fe;
+  color: var(--user-badge);
 }
 
 .messages {
@@ -138,15 +187,15 @@ h3 {
 .messages li {
   margin-bottom: 0.78rem;
   line-height: 1.45;
-  background: linear-gradient(145deg, #0f172a, #131f35);
-  border: 1px solid rgba(100, 116, 139, 0.35);
+  background: var(--message-bg);
+  border: 1px solid var(--message-border);
   border-radius: 12px;
   padding: 0.72rem 0.86rem;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
 }
 
 .timestamp {
-  color: #a5b4fc;
+  color: var(--timestamp);
   font-size: 0.76rem;
   letter-spacing: 0.02em;
 }
@@ -156,15 +205,15 @@ h3 {
   grid-template-columns: 1fr auto;
   gap: 0.7rem;
   padding-top: 0.8rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  border-top: 1px solid var(--soft-border);
 }
 
 input,
 button,
 select {
   border-radius: 10px;
-  border: 1px solid rgba(148, 163, 184, 0.38);
-  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid var(--panel-border);
+  background: var(--surface);
   color: var(--text);
   padding: 0.68rem 0.82rem;
   font: inherit;
@@ -175,7 +224,7 @@ input:focus,
 select:focus {
   outline: none;
   border-color: #93c5fd;
-  box-shadow: 0 0 0 3px #60a5fa33;
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 button {
