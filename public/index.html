@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Realtime Chat</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="chat-shell">
+      <header class="chat-header">
+        <h1>Realtime Chat</h1>
+      </header>
+
+      <ul id="messages" class="messages"></ul>
+
+      <form id="form" class="composer">
+        <input id="username" placeholder="Your name" maxlength="20" required />
+        <input id="input" placeholder="Type a message..." autocomplete="off" maxlength="250" required />
+        <button type="submit">Send</button>
+      </form>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./client.js"></script>
+  </body>
+</html>
