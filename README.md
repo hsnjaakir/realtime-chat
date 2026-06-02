@@ -2,8 +2,11 @@
 
 Realtime chat app with:
 - JWT auth (register/login)
+- Logout with server-side session invalidation
+- Password reset token flow (request + confirm)
 - Room-based messaging
 - Private messages
+- Private-message history retrieval
 - Message persistence (SQLite by default, Postgres optional)
 
 ## Run locally
@@ -26,3 +29,9 @@ Realtime chat app with:
 
 - Default: local SQLite database file at `chat.db`.
 - Optional Postgres: set `DATABASE_URL` in `.env`.
+
+## Password reset flow
+
+- Request token using the form in the auth panel (`/api/password-reset/request`).
+- Confirm with token + new password (`/api/password-reset/confirm`).
+- For local testing, set `DEV_EXPOSE_RESET_TOKEN=true` in `.env` to return token in API response.

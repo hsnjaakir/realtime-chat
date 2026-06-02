@@ -71,6 +71,10 @@ body {
   align-items: center;
 }
 
+.row.between {
+  justify-content: space-between;
+}
+
 .status-line {
   margin: 0;
   color: #93c5fd;
@@ -79,6 +83,12 @@ body {
 
 .status-line.error {
   color: #fca5a5;
+}
+
+h3 {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+  color: #cbd5e1;
 }
 
 .messages {

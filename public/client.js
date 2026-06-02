@@ -5,11 +5,19 @@ const authUsername = document.getElementById("authUsername");
 const authPassword = document.getElementById("authPassword");
 const registerBtn = document.getElementById("registerBtn");
 const authStatus = document.getElementById("authStatus");
+const resetRequestForm = document.getElementById("resetRequestForm");
+const resetUsername = document.getElementById("resetUsername");
+const resetToken = document.getElementById("resetToken");
+const resetNewPassword = document.getElementById("resetNewPassword");
+const resetConfirmBtn = document.getElementById("resetConfirmBtn");
+const resetStatus = document.getElementById("resetStatus");
 const chatStatus = document.getElementById("chatStatus");
 const currentUser = document.getElementById("currentUser");
+const logoutBtn = document.getElementById("logoutBtn");
 const roomInput = document.getElementById("roomInput");
 const joinRoomBtn = document.getElementById("joinRoomBtn");
 const privateTo = document.getElementById("privateTo");
+const loadPrivateHistoryBtn = document.getElementById("loadPrivateHistoryBtn");
 const messages = document.getElementById("messages");
 const form = document.getElementById("form");
 const input = document.getElementById("input");
@@ -49,6 +57,20 @@ const replaceHistory = (history) => {
   );
 };
 
+const clearAuthSession = () => {
+  if (socket) {
+    socket.disconnect();
+    socket = null;
+  }
+  localStorage.removeItem("chat_token");
+  token = "";
+  user = null;
+  activeRoom = "general";
+  messages.innerHTML = "";
+  authPanel.classList.remove("hidden");
+  chatPanel.classList.add("hidden");
+};
+
 const setOnlineUsers = (users) => {
   const me = user?.username;
   const selected = privateTo.value;
@@ -73,6 +95,7 @@ const connectSocket = () => {
 
   socket.on("connect_error", () => {
     setStatus(chatStatus, "Socket auth failed. Please login again.", true);
+    clearAuthSession();
   });
 
   socket.on("room:history", ({ room, messages: roomMessages }) => {
@@ -95,6 +118,11 @@ const connectSocket = () => {
 
   socket.on("message:error", ({ error }) => {
     setStatus(chatStatus, error, true);
+  });
+
+  socket.on("private:history", ({ withUser, messages: privateMessages }) => {
+    replaceHistory(privateMessages);
+    setStatus(chatStatus, `Loaded private history with @${withUser}`);
   });
 };
 
@@ -132,6 +160,21 @@ const authRequest = async (mode) => {
   connectSocket();
 };
 
+const authorizedFetch = async (url, options = {}) => {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...(options.headers || {})
+    }
+  });
+  if (response.status === 401) {
+    clearAuthSession();
+  }
+  return response;
+};
+
 authForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   await authRequest("login");
@@ -141,12 +184,95 @@ registerBtn.addEventListener("click", async () => {
   await authRequest("register");
 });
 
+resetRequestForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const username = resetUsername.value.trim().toLowerCase();
+  if (!username) {
+    setStatus(resetStatus, "Username is required.", true);
+    return;
+  }
+
+  const response = await fetch("/api/password-reset/request", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username })
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    setStatus(resetStatus, data.error || "Reset request failed.", true);
+    return;
+  }
+
+  if (data.devResetToken) {
+    resetToken.value = data.devResetToken;
+    setStatus(resetStatus, "Reset token generated (dev mode).");
+    return;
+  }
+
+  setStatus(resetStatus, "If username exists, reset token has been issued.");
+});
+
+resetConfirmBtn.addEventListener("click", async () => {
+  const tokenValue = resetToken.value.trim();
+  const newPassword = resetNewPassword.value;
+  if (!tokenValue || !newPassword) {
+    setStatus(resetStatus, "Token and new password are required.", true);
+    return;
+  }
+
+  const response = await fetch("/api/password-reset/confirm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token: tokenValue, newPassword })
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    setStatus(resetStatus, data.error || "Password reset failed.", true);
+    return;
+  }
+
+  resetToken.value = "";
+  resetNewPassword.value = "";
+  setStatus(resetStatus, "Password updated. You can now login.");
+});
+
+logoutBtn.addEventListener("click", async () => {
+  if (!token) {
+    clearAuthSession();
+    return;
+  }
+  await authorizedFetch("/api/logout", { method: "POST" });
+  clearAuthSession();
+});
+
 joinRoomBtn.addEventListener("click", () => {
   const room = roomInput.value.trim().toLowerCase();
   if (!room || !socket) {
     return;
   }
   socket.emit("room:join", { room });
+});
+
+loadPrivateHistoryBtn.addEventListener("click", async () => {
+  const recipient = privateTo.value;
+  if (!recipient) {
+    setStatus(chatStatus, "Choose a private recipient first.", true);
+    return;
+  }
+
+  if (socket) {
+    socket.emit("private:history:get", { withUser: recipient });
+    return;
+  }
+
+  const response = await authorizedFetch(`/api/private-history/${encodeURIComponent(recipient)}`);
+  const data = await response.json();
+  if (!response.ok) {
+    setStatus(chatStatus, data.error || "Failed to load private history.", true);
+    return;
+  }
+  replaceHistory(data.messages);
+  setStatus(chatStatus, `Loaded private history with @${recipient}`);
 });
 
 form.addEventListener("submit", (event) => {

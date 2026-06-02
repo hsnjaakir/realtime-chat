@@ -23,11 +23,23 @@
           </div>
           <p id="authStatus" class="status-line"></p>
         </form>
+        <form id="resetRequestForm" class="auth-form">
+          <h3>Password reset</h3>
+          <input id="resetUsername" placeholder="Username for reset" maxlength="32" />
+          <button type="submit">Request reset token</button>
+          <input id="resetToken" placeholder="Reset token" />
+          <input id="resetNewPassword" type="password" placeholder="New password (6+ chars)" minlength="6" />
+          <button id="resetConfirmBtn" type="button">Confirm reset</button>
+          <p id="resetStatus" class="status-line"></p>
+        </form>
       </section>
 
       <section id="chatPanel" class="chat-panel hidden">
         <div class="toolbar">
-          <span id="currentUser"></span>
+          <div class="row between">
+            <span id="currentUser"></span>
+            <button id="logoutBtn" type="button">Logout</button>
+          </div>
           <div class="row">
             <input id="roomInput" value="general" maxlength="64" />
             <button id="joinRoomBtn" type="button">Join room</button>
@@ -37,6 +49,7 @@
             <select id="privateTo">
               <option value="">Room (public)</option>
             </select>
+            <button id="loadPrivateHistoryBtn" type="button">Load PM history</button>
           </div>
           <p id="chatStatus" class="status-line"></p>
         </div>
