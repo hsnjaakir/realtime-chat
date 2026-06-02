@@ -18,8 +18,8 @@ body {
   background: #111827;
   border: 1px solid #1f2937;
   border-radius: 12px;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  display: flex;
+  flex-direction: column;
   height: min(85vh, 700px);
 }
 
@@ -33,9 +33,57 @@ body {
   font-size: 1.1rem;
 }
 
+.auth-panel,
+.chat-panel {
+  padding: 1rem 1.25rem;
+}
+
+.chat-panel {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.8rem;
+  height: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.6rem;
+  max-width: 420px;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.toolbar {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.status-line {
+  margin: 0;
+  color: #93c5fd;
+  font-size: 0.9rem;
+}
+
+.status-line.error {
+  color: #fca5a5;
+}
+
 .messages {
   margin: 0;
-  padding: 1rem 1.25rem;
+  padding: 0;
   list-style: none;
   overflow-y: auto;
 }
@@ -56,14 +104,15 @@ body {
 
 .composer {
   display: grid;
-  grid-template-columns: 180px 1fr auto;
+  grid-template-columns: 1fr auto;
   gap: 0.6rem;
-  padding: 1rem 1.25rem;
+  padding-top: 0.5rem;
   border-top: 1px solid #1f2937;
 }
 
-.composer input,
-.composer button {
+input,
+button,
+select {
   border-radius: 8px;
   border: 1px solid #334155;
   background: #0f172a;
@@ -72,18 +121,21 @@ body {
   font: inherit;
 }
 
-.composer button {
+button {
   background: #3b82f6;
   border-color: #3b82f6;
   cursor: pointer;
 }
 
-.composer button:hover {
+button:hover {
   background: #2563eb;
 }
 
 @media (max-width: 700px) {
+  .row,
+  .auth-actions,
   .composer {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    display: flex;
   }
 }

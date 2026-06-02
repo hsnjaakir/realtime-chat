@@ -12,13 +12,42 @@
         <h1>Realtime Chat</h1>
       </header>
 
-      <ul id="messages" class="messages"></ul>
+      <section id="authPanel" class="auth-panel">
+        <h2>Sign in or create account</h2>
+        <form id="authForm" class="auth-form">
+          <input id="authUsername" placeholder="Username" maxlength="32" required />
+          <input id="authPassword" type="password" placeholder="Password (6+ chars)" minlength="6" required />
+          <div class="auth-actions">
+            <button type="submit" data-mode="login">Login</button>
+            <button type="button" id="registerBtn">Register</button>
+          </div>
+          <p id="authStatus" class="status-line"></p>
+        </form>
+      </section>
 
-      <form id="form" class="composer">
-        <input id="username" placeholder="Your name" maxlength="20" required />
-        <input id="input" placeholder="Type a message..." autocomplete="off" maxlength="250" required />
-        <button type="submit">Send</button>
-      </form>
+      <section id="chatPanel" class="chat-panel hidden">
+        <div class="toolbar">
+          <span id="currentUser"></span>
+          <div class="row">
+            <input id="roomInput" value="general" maxlength="64" />
+            <button id="joinRoomBtn" type="button">Join room</button>
+          </div>
+          <div class="row">
+            <label for="privateTo">Send to</label>
+            <select id="privateTo">
+              <option value="">Room (public)</option>
+            </select>
+          </div>
+          <p id="chatStatus" class="status-line"></p>
+        </div>
+
+        <ul id="messages" class="messages"></ul>
+
+        <form id="form" class="composer">
+          <input id="input" placeholder="Type a message..." autocomplete="off" maxlength="250" required />
+          <button type="submit">Send</button>
+        </form>
+      </section>
     </main>
 
     <script src="/socket.io/socket.io.js"></script>
