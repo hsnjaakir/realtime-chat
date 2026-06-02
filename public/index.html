@@ -16,25 +16,43 @@
       </header>
 
       <section id="authPanel" class="auth-panel">
-        <h2>Sign in or create account</h2>
-        <form id="authForm" class="auth-form">
-          <input id="authUsername" placeholder="Username" maxlength="32" required />
-          <input id="authPassword" type="password" placeholder="Password (6+ chars)" minlength="6" required />
-          <div class="auth-actions">
-            <button type="submit" data-mode="login">Login</button>
-            <button type="button" id="registerBtn">Register</button>
+        <div class="auth-layout">
+          <div class="auth-left">
+            <h2>Sign in or create account</h2>
+            <form id="authForm" class="auth-form">
+              <input id="authUsername" placeholder="Username" maxlength="32" required />
+              <input id="authPassword" type="password" placeholder="Password (6+ chars)" minlength="6" required />
+              <div class="auth-actions">
+                <button type="submit" data-mode="login">Login</button>
+                <button type="button" id="registerBtn">Register</button>
+              </div>
+              <p id="authStatus" class="status-line"></p>
+            </form>
+            <form id="resetRequestForm" class="auth-form">
+              <h3>Password reset</h3>
+              <input id="resetUsername" placeholder="Username for reset" maxlength="32" />
+              <button type="submit">Request reset token</button>
+              <input id="resetToken" placeholder="Reset token" />
+              <input id="resetNewPassword" type="password" placeholder="New password (6+ chars)" minlength="6" />
+              <button id="resetConfirmBtn" type="button">Confirm reset</button>
+              <p id="resetStatus" class="status-line"></p>
+            </form>
           </div>
-          <p id="authStatus" class="status-line"></p>
-        </form>
-        <form id="resetRequestForm" class="auth-form">
-          <h3>Password reset</h3>
-          <input id="resetUsername" placeholder="Username for reset" maxlength="32" />
-          <button type="submit">Request reset token</button>
-          <input id="resetToken" placeholder="Reset token" />
-          <input id="resetNewPassword" type="password" placeholder="New password (6+ chars)" minlength="6" />
-          <button id="resetConfirmBtn" type="button">Confirm reset</button>
-          <p id="resetStatus" class="status-line"></p>
-        </form>
+          <aside class="auth-brand" aria-label="Brand panel">
+            <div class="logo-badge" aria-hidden="true">
+              <span class="logo-dot"></span>
+              <span class="logo-dot"></span>
+              <span class="logo-dot"></span>
+            </div>
+            <h3 class="brand-title">Realtime Chat</h3>
+            <p class="brand-text">A cozy place for rooms, private chats, and instant connection.</p>
+            <ul class="brand-points">
+              <li>Fast, private, and secure messaging</li>
+              <li>Theme-friendly and mobile-ready</li>
+              <li>Built for teams, friends, and communities</li>
+            </ul>
+          </aside>
+        </div>
       </section>
 
       <section id="chatPanel" class="chat-panel hidden">
