@@ -14,6 +14,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const PORT = Number(process.env.PORT || 3001);
+const HOST = process.env.HOST || "127.0.0.1";
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
 const DEFAULT_ROOM = "general";
 const ONLINE_USERS = new Map();
@@ -679,8 +680,8 @@ io.on("connection", async (socket) => {
 
 const start = async () => {
   await store.init();
-  server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  server.listen(PORT, HOST, () => {
+    console.log(`Server running on http://${HOST}:${PORT}`);
   });
 };
 
